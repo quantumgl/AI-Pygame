@@ -1,6 +1,7 @@
 __author__ = 'Andres'
 
 import pygame
+import physics
 pygame.init()
 
-print "Hola Denise"
+physics.get_random_coordinates(640, 480)
