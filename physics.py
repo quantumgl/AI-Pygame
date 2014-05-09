@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 """physics.py: Functions that help control the physics in the game environment"""
 
+__author__ = "Andres"
+__email__ = "andresgl@live.com"
+__status__ = "Development"
+
 import random
 import pygame
 import environment as env
 
-__author__ = "Andres"
-__email__ = "andresgl@live.com"
-__status__ = "Development"
 
 pygame.init()
 
@@ -15,6 +16,10 @@ pygame.init()
 def get_random_coordinates(width, height):
     """
     Returns a random 2D coordinate as a 2-tuple, scaled to current window size
+
+    :type height: int
+    :type width: int
+    :rtype : (int, int)
     """
     rand_x = random.randint(width, env.WINDOW_WIDTH-width)
     rand_y = random.randint(height, env.WINDOW_HEIGHT-height)
