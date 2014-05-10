@@ -137,12 +137,12 @@ def movement(keys):
             direction = directions[d]
     #Diagonals
     if up and left:
-        direction = directions["TOP_LEFT"]
+        direction = directions["UP_LEFT"]
     if up and right:
-        direction = directions["TOP_RIGHT"]
+        direction = directions["UP_RIGHT"]
     if down and left:
-        direction = directions["BOTTOM_LEFT"]
+        direction = directions["DOWN_LEFT"]
     if down and right:
-        direction = directions["BOTTOM_RIGHT"]
+        direction = directions["DOWN_RIGHT"]
 
     return direction

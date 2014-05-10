@@ -1,8 +1,6 @@
 # Enemies
 import pygame
-
-from models.entities import Enemy
-
+from entities import Enemy
 
 class Waddle_Dee(Enemy):
     def __init__(self, spawn_x, spawn_y):

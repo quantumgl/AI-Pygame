@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/AI-Pygame.iml" filepath="$PROJECT_DIR$/.idea/AI-Pygame.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../kirbys-adventure/.idea/Kirby's Space Adventure.iml" filepath="$PROJECT_DIR$/../kirbys-adventure/.idea/Kirby's Space Adventure.iml" />
     </modules>
   </component>
 </project>

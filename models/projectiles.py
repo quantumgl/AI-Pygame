@@ -1,8 +1,8 @@
 # Projectiles
 import pygame
 
-import settings
-from models.models import Projectile
+import environment as settings
+from models import Projectile
 
 
 class Laser(Projectile):

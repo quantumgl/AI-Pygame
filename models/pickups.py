@@ -1,9 +1,7 @@
 # Pickups
 
 import pygame
-
-from models.models import Pickup
-
+from models import Pickup
 
 class Rupee(Pickup):
     def __init__(self, spawn_x, spawn_y):

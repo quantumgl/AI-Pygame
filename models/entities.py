@@ -1,9 +1,9 @@
 import pygame
 
-import settings
+import environment as settings
 from models import Entity
 from projectiles import Bullet, Laser
-from models.pickups import Rupee
+from pickups import Rupee
 
 
 pygame.init()
