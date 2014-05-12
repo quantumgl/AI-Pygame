@@ -13,6 +13,15 @@ import environment as env
 pygame.init()
 
 
+def magnitude(vector):
+    return (vector[0]**2 + vector[1]**2)**0.5
+
+
+def normalize(vector):
+    mag = magnitude(vector)
+    return vector[0]/mag, vector[1]/mag
+
+
 def get_random_coordinates(width, height):
     """
     Returns a random 2D coordinate as a 2-tuple, scaled to current window size

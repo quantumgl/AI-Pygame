@@ -11,24 +11,26 @@ pygame.init()
 class Hero(Entity):
     def __init__(self):
         # Default Rectangle for Hero
-        self.HERO_START_X = 20
-        self.HERO_START_Y = settings.WINDOW_HEIGHT/2
-        self.HERO_SIZE = 50 # in pixels
-        self.HERO_RECT = pygame.Rect(self.HERO_START_X, self.HERO_START_Y, self.HERO_SIZE, self.HERO_SIZE)
+        self.hero_start_x = 20
+        self.hero_start_y = settings.WINDOW_HEIGHT/2
+        self.hero_size = 50 # in pixels
+        self.hero_rect = pygame.Rect(self.hero_start_x, self.hero_start_y, self.hero_size, self.hero_size)
 
-        Entity.__init__(self, self.HERO_RECT) # pygame.Rect super constructor
+        Entity.__init__(self, self.hero_rect)
         
         self.hit_points = 3
-        self.SPEED = 5 # Default speed
+        self.base_speed = 5  # Default speed
         self.is_firing_laser = False
         self.laser = None
         self.ok2shoot = True
 
-    # Laser - TODO: fix laser so that it is not instantiated every frame, which causes collision skipping.
-    def fire_laser(self):
-        if self.is_firing_laser and self.laser != None:
+    # Laser
+    def fire_laser(self, time=0):
+        if self.laser is not None:
+            #self.is_firing_laser = True
             self.laser.x = self.right
             self.laser.y = (self.top + self.bottom)/2
+            self.laser.width = settings.WINDOW_WIDTH - self.right
         else:
             self.laser = Laser(self.right, (self.top + self.bottom)/2)
         
@@ -51,12 +53,12 @@ class Hero(Entity):
 
 
 class Enemy(Entity):
-    def __init__(self, enemy_rect):
-
-        Entity.__init__(self, enemy_rect) # pygame.Rect super constructor
+    def __init__(self, enemy_rect, drop_type="NONE"):
+        self.drop_type = drop_type
+        Entity.__init__(self, enemy_rect)
     
     def move(self):
-        self.left -= self.SPEED
+        self.left -= self.base_speed
     
     def drop(self):
         return Rupee(self.right, self.bottom)

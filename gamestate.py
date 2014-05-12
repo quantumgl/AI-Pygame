@@ -9,17 +9,18 @@ from queue import Queue
 
 class GameState:
     def __init__(self):
+        self.time = 0
         self.hero = Hero()
-        self.score = 0 # Score increments from defeating enemies and picking up rupees
+        self.score = 0  # Score increments from defeating enemies and picking up rupees
         self.paused = False
         self.win = False
         self.game_over = False
-        self.projectile_list = [] # List of projectiles onscreen.
-        self.rupee_list = [] # List of present rupees onscreen.
-        self.enemy_list = [] # List of present enemies of one wave.
-        self.wave_queue = Queue() # List used as a queue of waves
-        self.initialize_waves() # Initialize all of the waves into the the wave queue
-        self.next_wave() # Start First Wave
+        self.projectile_list = []  # List of projectiles onscreen.
+        self.rupee_list = []  # List of present rupees onscreen.
+        self.enemy_list = []  # List of present enemies of one wave.
+        self.wave_queue = Queue()  # List used as a queue of waves
+        self.initialize_waves()  # Initialize all of the waves into the the wave queue
+        self.next_wave()  # Start First Wave
 
     def toggle_paused(self):
         self.paused = not self.paused
@@ -30,7 +31,7 @@ class GameState:
             self.rupee_list[i].move()
             if collision:
                 dj.play_beep()
-                self.score += da_boss.calculate_score("RUPEE") # Increment Score
+                self.score += da_boss.calculate_score("RUPEE")  # Increment Score
                 del self.rupee_list[i]
                 break
 

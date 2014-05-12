@@ -21,9 +21,6 @@ from managers import sound_manager as dj
 from gamestate import GameState
 
 pygame.init()
-
-
-
 #---MAIN------------------------------------------------
 
 
@@ -39,7 +36,7 @@ def main():
         else:
             environment.DISPLAY_SURFACE.blit(environment.PAUSED_TEXT,(environment.WINDOW_WIDTH/2,environment.WINDOW_HEIGHT/2))
             pygame.display.update()
-        
+        game_state.time += 1
         environment.CLOCK.tick(environment.FPS)
         print "Score: " + str(game_state.score)
 
@@ -111,7 +108,7 @@ def game_logic():
     for enemy in game_state.enemy_list:
         if helper.check_collision(enemy, game_state.hero):
             game_state.game_over = True
-            print "GAME_OVER"# GAME OVER - TODO
+            print "GAME_OVER"  # GAME OVER - TODO
 
     # Hero - Laser
     if game_state.hero.is_firing_laser:
@@ -150,6 +147,7 @@ def draw():
 
     pygame.display.update()
 
+
 #End Game
 def end_game():
     if game_state.game_over:
@@ -179,9 +177,7 @@ def handle_quit(event, GAME_OVER = False):
 #---BLACK-MAGIC---
 
 if __name__ == '__main__':
-    # BG music
     dj.loop_background_music()
-    # Display
     pygame.display.set_caption("BitCuisine Experiment")
     game_state = GameState()
     main()
