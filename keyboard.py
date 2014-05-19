@@ -17,6 +17,7 @@ arrow_keys = {
 }
 
 system = {
+    "QUEUE": K_q,
     "MUTE": K_m,
     "=": K_EQUALS,
     "K+": K_KP_PLUS,
@@ -44,6 +45,10 @@ directions = {
     "DOWN_LEFT": (-1, 1),
     "DOWN_RIGHT": (1, 1)
 }
+
+
+def queue_prompt(event):
+    return event.type == KEYDOWN and event.key == system["QUEUE"]
 
 
 def start(event):

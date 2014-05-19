@@ -10,7 +10,7 @@ VOL_ADJUSTER = 0.20
 
 #Load Sound
 BEEP = pg.mixer.Sound('sound/beep.wav') 
-MUSIC = pg.mixer.Sound('sound/ParagonX9_Chaoz-Fantasy-8-Bit.wav')
+MUSIC = pg.mixer.Sound('sound/paradise3.wav')
 PEW = pg.mixer.Sound('sound/pew.wav')
 
 #Manual Channels

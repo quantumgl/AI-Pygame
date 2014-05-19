@@ -64,6 +64,17 @@ ORBS = {
     "RED": ORB_RED
 }
 
+classtotype = {
+    "TANK": "YELLOW",
+    "SWARM": "ORANGE",
+    "NORMAL": "GREEN",
+    "BOSS": "RED",
+    "SCATTER": "PURPLE",
+    "SPEED": "PINK",
+    "GHOST": "WHITE",
+    "MIMIC": "AQUA"
+}
+
 LASER_ITEM = pygame.image.load('img/laser/laser item.png')
 
 LASER = {
@@ -79,7 +90,6 @@ LASER = {
 # Images		
 BACKGROUND = pygame.image.load('img/cloud background.png')
 HERO_IMG = pygame.image.load('img/hero and goatee.png')
-HERO_IMG = pygame.Surface.convert_alpha(HERO_IMG)
 RUPEE_IMG = pygame.image.load('img/item thingie.png')
 ENEMY_IMG = pygame.image.load('img/enemy navi.png')
 LASER_IMG = pygame.image.load('img/laser.png')
@@ -111,7 +121,8 @@ def draw_enemy(screen, enemy):
         pygame.draw.rect(screen, RED, [enemy.x, enemy.y, enemy.get_width(), enemy.get_height()])
     else:
         screen.blit(WINGS[WING_COLORS[random.randint(0, 6)]], (enemy.x+enemy.width/2, enemy.y))
-        screen.blit(ORBS[ORB_COLORS[random.randint(0, 6)]], (enemy.x, enemy.y))
+        enemy_class = enemy.sign.id[0]
+        screen.blit(ORBS[classtotype[enemy_class]], (enemy.x, enemy.y))
 
 
 def draw_rupee(screen, rupee):

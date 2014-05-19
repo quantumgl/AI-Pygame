@@ -38,7 +38,7 @@ def main():
             pygame.display.update()
         game_state.time += 1
         environment.CLOCK.tick(environment.FPS)
-        print "Score: " + str(game_state.score)
+        #print "Score: " + str(game_state.score)
 
 
 #---FUNCTIONS-------------------------------------------
@@ -55,7 +55,10 @@ def handle_input(END_GAME = False):
 
         # Closing
         handle_quit(event)
-        
+
+        if keyboard.queue_prompt(event):
+            game_state.next_wave()
+
         # Pausing game
         if keyboard.pause_prompt(keys):
             game_state.toggle_paused()   
@@ -91,8 +94,8 @@ def handle_input(END_GAME = False):
             if game_state.hero.ok_to_shoot():
                 game_state.hero_fire()
                 dj.play_pew()
-        elif not game_state.hero.ok_to_shoot():
-            game_state.hero.recharge()       
+
+
         
                 
 def game_logic():
@@ -104,6 +107,7 @@ def game_logic():
     location = helper.locate_in_boundary(game_state.hero, environment.BOUNDARY)
     helper.movement_manager(game_state.hero, location)
     game_state.hero.update_pos()
+    game_state.hero.recharge()
 
     for enemy in game_state.enemy_list:
         if helper.check_collision(enemy, game_state.hero):

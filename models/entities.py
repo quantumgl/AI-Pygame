@@ -8,6 +8,7 @@ from pickups import Rupee
 
 pygame.init()
 
+
 class Hero(Entity):
     def __init__(self):
         # Default Rectangle for Hero
@@ -16,7 +17,7 @@ class Hero(Entity):
         self.hero_size = 50 # in pixels
         self.hero_rect = pygame.Rect(self.hero_start_x, self.hero_start_y, self.hero_size, self.hero_size)
 
-        Entity.__init__(self, self.hero_rect)
+        Entity.__init__(self, self.hero_rect, ["HERO", ["HERO", "HERO"]])
         
         self.hit_points = 3
         self.base_speed = 5  # Default speed
@@ -40,7 +41,7 @@ class Hero(Entity):
 
     # Bullet
     def fire_bullet(self):
-        pew = Bullet(self.right, (self.top + self.bottom)/2)
+        pew = Bullet(self.right, (self.top + self.bottom)/2, parent_stat=self.stats)
         self.ok2shoot = False
         return pew
 
@@ -53,9 +54,8 @@ class Hero(Entity):
 
 
 class Enemy(Entity):
-    def __init__(self, enemy_rect, drop_type="NONE"):
-        self.drop_type = drop_type
-        Entity.__init__(self, enemy_rect)
+    def __init__(self, enemy_rect, sign=None, w=1):
+        Entity.__init__(self, enemy_rect, sign, w)
     
     def move(self):
         self.left -= self.base_speed

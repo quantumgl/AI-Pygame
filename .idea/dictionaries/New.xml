@@ -2,7 +2,10 @@
   <dictionary name="New">
     <words>
       <w>colorwings</w>
+      <w>cosx</w>
       <w>pygame</w>
+      <w>sinx</w>
+      <w>siny</w>
     </words>
   </dictionary>
 </component>

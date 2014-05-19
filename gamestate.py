@@ -5,6 +5,7 @@ from models.entities import Hero
 import enemy_wave_generator as mavericks
 
 from queue import Queue
+import engines
 
 
 class GameState:
@@ -35,7 +36,6 @@ class GameState:
                 del self.rupee_list[i]
                 break
 
-
     def update_pews(self):
         for pew in range(len(self.projectile_list)):
             if self.projectile_list[pew].is_out_of_screen():
@@ -44,23 +44,29 @@ class GameState:
         for pew in self.projectile_list:
             pew.move()
 
-
     def hero_fire(self):
         pew = self.hero.fire_bullet()
         self.projectile_list.append(pew)
 
-
     def update_enemies(self):
-        for projectile in self.projectile_list:
-            for enemy_index in range(len(self.enemy_list)):
-                if helper.check_collision(projectile, self.enemy_list[enemy_index]):
-                    self.rupee_list.append(self.enemy_list[enemy_index].drop())
-                    self.score += 300
-                    del self.enemy_list[enemy_index]
-                    break
-        
         for enemy_index in range(len(self.enemy_list)):
-            if self.enemy_list[enemy_index].right < 0 :
+            for projectile_index in range(len(self.projectile_list)):
+                if helper.check_collision(self.projectile_list[projectile_index], self.enemy_list[enemy_index]):
+                    #
+                    self.score += 100
+                    self.enemy_list[enemy_index].get_hit_by(self.projectile_list[projectile_index])
+                    if self.enemy_list[enemy_index].sign.id[0] != "GHOST":
+                        del self.projectile_list[projectile_index]
+                    break
+
+        for enemy_index in range(len(self.enemy_list)):
+            if not self.enemy_list[enemy_index].alive:
+                self.rupee_list.append(self.enemy_list[enemy_index].drop())
+                del self.enemy_list[enemy_index]
+                break
+
+        for enemy_index in range(len(self.enemy_list)):
+            if self.enemy_list[enemy_index].right < 0:
                 del self.enemy_list[enemy_index]
                 break
 
@@ -73,11 +79,12 @@ class GameState:
                     del self.enemy_list[enemy_index]
                     break
 
-
         for enemy in self.enemy_list:
             enemy.move()
+            engines.siny(enemy)
 
-        if len(self.enemy_list) == 0:
+        if len(self.enemy_list) < 2:
+            print "I'm the evil one"
             self.next_wave()
 
     def initialize_waves(self):
@@ -98,12 +105,13 @@ class GameState:
         self.wave_queue.enqueue(wave_7)
         self.wave_queue.enqueue(wave_8)
 
-
     def next_wave(self):
-        if self.wave_queue.size > 0:
-            self.enemy_list = self.wave_queue.dequeue()
+        print "Next wave called"
+        if self.wave_queue.size > 1:
+            self.enemy_list = self.enemy_list + self.wave_queue.dequeue()
         else:
-            self.win = True
+            print "Doing something stupid"
+            self.initialize_waves()
 
 
 
