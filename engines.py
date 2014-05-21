@@ -4,21 +4,26 @@ import math
 import time
 
 
-def sinx(actor):
+def sinx(actor, stats):
     t = time.clock() - actor.sign.spawn_time
-    actor.centerx -= math.cos(t*math.pi)
+    actor.centerx -= stats.speed*math.cos(t*math.pi)
 
 
-def siny(actor):
+def siny(actor, stats):
     t = time.clock() - actor.sign.spawn_time
-    actor.centery -= 5*math.cos(t*math.pi)
+    actor.centery -= stats.speed*math.cos(t*math.pi)
 
 
-def cosx(actor):
+def cosx(actor, stats):
     t = time.clock() - actor.sign.spawn_time
-    actor.centerx += math.sin(t*math.pi)
+    actor.centerx += stats.speed*math.sin(t*math.pi)
 
 
-def cosy(actor):
+def cosxx(actor, stats):
     t = time.clock() - actor.sign.spawn_time
-    actor.centery += math.sin(t*math.pi)
+    actor.centerx += stats.speed*math.sin(t*math.pi) - t
+
+
+def cosy(actor, stats):
+    t = time.clock() - actor.sign.spawn_time
+    actor.centery += stats.speed*math.sin(t*math.pi)

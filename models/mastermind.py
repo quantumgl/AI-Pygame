@@ -4,6 +4,13 @@ import time
 import math
 import random
 
+ENEMY_CLASSES = [
+    "TANK", "SWARM", "NORMAL", "BOSS", "SCATTER", "SPEED", "GHOST", "MIMIC"
+]
+
+WING_COLORS = [
+    "YELLOW", "PURPLE", "PINK", "ORANGE", "GREEN", "AQUA", "RED", "BLUE", "GREY"
+]
 
 class Mastermind():
     def __init__(self, game_type="FIXED", instance_time=1.0):
@@ -25,15 +32,24 @@ class Mastermind():
 
     def get_weight(self, hp_percentage=1.0):
         if self.game_type == "FIXED":
-            return self.weight/120.0 + 5
+            return self.weight/120.0
 
         if self.game_type == "DYNAMIC":
             if hp_percentage > 0.75:
-                return self.weight/120.0 + 5
+                return self.weight/120.0
             elif hp_percentage > 0.25:
-                return self.weight*0.5/120.0 + 5
+                return self.weight*0.5/120.0
             else:
-                return self.weight*0.25/120.0 + 5
+                return self.weight*0.25/120.0
+
+    def decision(self, hp_percentage=1.0):
+        if hp_percentage > 0.75:
+                return "HARD"
+        elif hp_percentage > 0.25:
+            return "MEDIUM"
+        else:
+            return "EASY"
+
 
     def ask_if_drop(self, hp_percentage=1.0):
         return 1/math.log(self.get_weight(hp_percentage)*2 + 5) > random.randint(0, 100)/100.0
@@ -87,6 +103,20 @@ class Mastermind():
                     return "HP"
                 return "LASER"
 
+    def get_enemy(self):
+        return ENEMY_CLASSES[random.randint(0, 6)]
+
+    def get_wing(self):
+        return WING_COLORS[random.randint(0, 7)]
+
+    def get_stache(self, orb):
+        STACHES = ["LONG", "SHARP", "WIDE"]
+        if orb == "BOSS":
+            return "CURLY"
+        elif orb == "TANK":
+            return "HITLER"
+        else:
+            return STACHES[random.randint(0, 2)]
 
 
 

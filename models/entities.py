@@ -87,7 +87,8 @@ class Enemy(Entity):
         self.bar = Enemy_Bar(self.stats, (self.centerx, self.centery))
     
     def move(self):
-        self.left -= self.base_speed
+        print self.base_speed
+        self.x -= self.base_speed
     
     def drop(self, pickup_sign):
         return Rupee(self.right, self.bottom, sign=pickup_sign)

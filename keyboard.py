@@ -48,7 +48,8 @@ directions = {
 
 
 def queue_prompt(event):
-    return event.type == KEYDOWN and event.key == system["QUEUE"]
+    #return event.type == KEYDOWN and event.key == system["QUEUE"]
+    return False
 
 
 def start(event):

@@ -12,11 +12,14 @@ import engines
 
 
 class GameState:
-    def __init__(self):
+    def __init__(self, mode="FIXED"):
         self.time = time.clock()
         self.hero = Hero()
         self.score = 0  # Score increments from defeating enemies and picking up rupees
         self.paused = False
+        self.hitcount = 0
+        self.killcount = 0
+        self.mode = mode
         self.win = False
         self.game_over = False
         self.projectile_list = []  # List of projectiles onscreen.
@@ -26,7 +29,7 @@ class GameState:
         #self.initialize_waves()  # Initialize all of the waves into the the wave queue
         #self.next_wave()  # Start First Wave
         self.hero_bar = Bar(self.hero.stats, self.hero)
-        self.master = Mastermind("DYNAMIC", time.clock())
+        self.master = Mastermind(mode, time.clock())
         #self.enemy_bar = Bar()
 
     def hpp(self):
@@ -73,6 +76,8 @@ class GameState:
         self.projectile_list.append(pew)
 
     def update_enemies(self):
+        #pewpew
+        #print self.enemy_list
         for enemy_index in range(len(self.enemy_list)):
             self.enemy_list[enemy_index].update_bar()
             for projectile_index in range(len(self.projectile_list)):
@@ -83,24 +88,28 @@ class GameState:
                         del self.projectile_list[projectile_index]
                     break
 
+        #cleanup kills
         for enemy_index in range(len(self.enemy_list)):
             if not self.enemy_list[enemy_index].alive:
                 if self.master.ask_if_drop(self.hero.stats.current_hp/self.hero.stats.hp):
                     drop_signature = ["PICKUP", [self.master.determine_drop(self.hpp())]]
                     self.pickup_list.append(self.enemy_list[enemy_index].drop(drop_signature))
+                self.hero.stats.attack += 1
+                self.killcount += 1
                 del self.enemy_list[enemy_index]
                 break
 
+        #cleanup offscreen
         for enemy_index in range(len(self.enemy_list)):
-            if self.enemy_list[enemy_index].right < 0:
-                del self.enemy_list[enemy_index]
-                self.hero.stats.attack += 1
+            if self.enemy_list[enemy_index].right <= 0:
+                self.enemy_list.pop(enemy_index)
                 break
 
         # For the laser detection
         for enemy_index in range(len(self.enemy_list)):
             if self.hero.is_firing_laser:
                 if helper.check_collision(self.enemy_list[enemy_index], self.hero.laser):
+                    self.killcount += 1
                     if self.master.ask_if_drop(self.hero.stats.current_hp/self.hero.stats.hp):
                         drop_signature = ["PICKUP", [self.master.determine_drop(self.hpp())]]
                         self.pickup_list.append(self.enemy_list[enemy_index].drop(drop_signature))
@@ -109,16 +118,23 @@ class GameState:
                     self.hero.stats.attack += 1
                     break
 
+        #needs to be made into a long and complex function
         for enemy in self.enemy_list:
             enemy.move()
-            engines.siny(enemy)
+            engines.siny(enemy, enemy.stats)
+            #engines.cosxx(enemy, enemy.stats)
 
-        if len(self.enemy_list) == 0:
+        #panic
+        if len(self.enemy_list) < 2:
             print "Less than two enemies left"
             self.next_wave()
 
     def initialize_waves(self):
         w = self.master.get_weight()
+        enemy = self.master.get_enemy()
+        wing = self.master.get_wing()
+        stache = self.master.get_stache(enemy)
+        """
         wave_1 = mavericks.generate_inverse_v_shaped_wave(w)
         wave_2 = mavericks.generate_diagonal_wave_1(w)
         wave_3 = mavericks.generate_diagonal_wave_2(w)
@@ -127,7 +143,9 @@ class GameState:
         wave_6 = mavericks.generate_diagonal_wave_2(w)
         wave_7 = mavericks.generate_diagonal_wave_1(w)
         wave_8 = mavericks.generate_inverse_v_shaped_wave(w)
-        self.wave_queue.enqueue(wave_1)
+        """
+        self.wave_queue.enqueue(mavericks.generate_a_wave(w, enemy, wing, stache))
+        """
         self.wave_queue.enqueue(wave_2)
         self.wave_queue.enqueue(wave_3)
         self.wave_queue.enqueue(wave_4)
@@ -135,6 +153,7 @@ class GameState:
         self.wave_queue.enqueue(wave_6)
         self.wave_queue.enqueue(wave_7)
         self.wave_queue.enqueue(wave_8)
+        """
 
     def next_wave(self):
         print "Next wave called"

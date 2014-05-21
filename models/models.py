@@ -44,8 +44,8 @@ class Stats():
         if actor_class == "TANK":
             self.hp = 15 + w
             self.attack = 5 + math.sqrt(w)
-            self.defense = 5 + math.sqrt(w)
-            self.speed = 1 + math.log(w/20)
+            self.defense = 5 + w*math.log(w)
+            self.speed = 1 + math.log(w/10 + 5)
 
         if actor_class == "SWARM":
             self.hp = 5 + math.sqrt(w)
@@ -80,7 +80,7 @@ class Stats():
         if actor_class == "GHOST":
             self.hp = 2 + math.log(w)
             self.attack = 10 + math.sqrt(w)
-            self.defense = 1000000
+            self.defense = 10 + math.sqrt(w)
             self.speed = 3 + math.log(w)*math.sqrt(w)/20
         """
         if actor_class == "SPEED":
@@ -93,7 +93,7 @@ class Stats():
             self.hp = 100 + math.sqrt(w)
             self.attack = 5 + 2*math.sqrt(w)
             self.defense = 1 + math.log(w)
-            self.speed = 3 + 5*math.log(w)
+            self.speed = 3 + 2*math.log(w)
 
         self.current_hp = self.hp
 
@@ -151,7 +151,7 @@ class Actor(pygame.Rect):
     def __init__(self, rect, sign=None):
         pygame.Rect.__init__(self, rect)
         self.sign = Signature(sign)
-        self.base_speed = 0
+        self.base_speed = 6
         self.dir_x = 0
         self.dir_y = 0
         self.direction = (0, 0)

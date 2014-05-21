@@ -13,6 +13,7 @@
 
 import sys
 import time
+import random
 import pygame
 import environment
 import keyboard
@@ -20,24 +21,25 @@ import physics as helper
 from managers import graphics_manager as picasso
 from managers import sound_manager as dj
 from gamestate import GameState
+import logger
 
 pygame.init()
 #---MAIN------------------------------------------------
 
 
-def main():
+def main(log):
     global game_state
     while True:
-        handle_input()
+        handle_input(log)
         
         if not game_state.paused:
-            game_logic()
-            draw()
-            end_game()     
+            game_logic(log)
+            draw(log)
+            end_game(log)
         else:
             environment.DISPLAY_SURFACE.blit(environment.PAUSED_TEXT,(environment.WINDOW_WIDTH/2,environment.WINDOW_HEIGHT/2))
             pygame.display.update()
-        game_state.time += 1
+        #game_state.time += 1
         environment.CLOCK.tick(environment.FPS)
         #print "Score: " + str(game_state.score)
 
@@ -46,7 +48,7 @@ def main():
 #
 #---PRIMARY-FUNCTIONS-----------------------------------
 
-def handle_input(END_GAME = False):
+def handle_input(log, END_GAME = False):
     """
     Handles all external input,such as those  keyboard and mouse.
     """
@@ -72,7 +74,13 @@ def handle_input(END_GAME = False):
         global game_state
         handle_quit(event, END_GAME)
         if keyboard.restart(event, END_GAME):
-            game_state = GameState()
+            if game_state.mode == "FIXED":
+                new_choice = "DYNAMIC"
+            else:
+                new_choice = "FIXED"
+            game_state = GameState(new_choice)
+            log.refresh(new_choice)
+            log.first_row()
             
 
         # Sound Adjustment
@@ -98,7 +106,7 @@ def handle_input(END_GAME = False):
 
         
                 
-def game_logic():
+def game_logic(log):
     """
     Handles all game logic,
     such as collisions, damage calculation, movement,etc.
@@ -112,6 +120,7 @@ def game_logic():
     if game_state.hero.vulnerable:
         for enemy in game_state.enemy_list:
             if helper.check_collision(enemy, game_state.hero):
+                game_state.hitcount += 1
                 game_state.hero.get_hit_by_enemy(enemy)
                 game_state.hero.knockback()
                 game_state.hero.give_immunity()
@@ -142,8 +151,10 @@ def game_logic():
     hp_100 = game_state.hero.stats.current_hp / game_state.hero.stats.hp
     game_state.master.update(hp_100)
 
+    log.add_row(game_state)
+
     
-def draw():
+def draw(log):
     """
     Draws everything and updates the changes in the screen
     """
@@ -169,11 +180,13 @@ def draw():
 
     picasso.draw_bar(screen, game_state.hero_bar, hero_bar=True)
 
+    picasso.draw_score(screen, game_state.score)
+
     pygame.display.update()
 
 
 #End Game
-def end_game():
+def end_game(log):
     if game_state.game_over:
         surf = environment.DISPLAY_SURFACE
 
@@ -183,7 +196,7 @@ def end_game():
         pygame.display.update()
 
         while game_state.game_over:
-            handle_input(game_state.game_over)
+            handle_input(log, game_state.game_over)
 
     if game_state.win:
         picasso.draw_background(surf)
@@ -205,10 +218,11 @@ def handle_quit(event, GAME_OVER = False):
 if __name__ == '__main__':
     dj.loop_background_music()
     pygame.display.set_caption("BitCuisine Experiment")
-    game_state = GameState()
-    main()
-
-
+    possibilities = ["FIXED", "DYNAMIC"]
+    game_state = GameState(possibilities[random.randint(0, 1)])
+    log = logger.Log("", game_state)
+    log.first_row()
+    main(log)
 
 
 

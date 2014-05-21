@@ -23,6 +23,22 @@ WING_AQUA = pygame.image.load('img/colorwings/wing aqua.png')
 WING_BLUE = pygame.image.load('img/colorwings/wing blue.png')
 WING_RED = pygame.image.load('img/colorwings/wing red.png')
 
+STACHE_LONG = pygame.image.load('img/staches/stache long.png')
+STACHE_HITLER = pygame.image.load('img/staches/stache hitler.png')
+STACHE_CURLY = pygame.image.load('img/staches/stache curly end.png')
+STACHE_SHARP = pygame.image.load('img/staches/stache sharp.png')
+STACHE_WIDE = pygame.image.load('img/staches/stache wide.png')
+
+
+
+STACHES = {
+    "LONG": STACHE_LONG,
+    "HITLER": STACHE_HITLER,
+    "CURLY": STACHE_CURLY,
+    "SHARP": STACHE_SHARP,
+    "WIDE": STACHE_WIDE
+}
+
 WING_COLORS = [
     "YELLOW", "PURPLE", "PINK", "ORANGE", "GREEN", "AQUA", "RED", "BLUE", "GREY"
 ]
@@ -159,9 +175,10 @@ def draw_enemy(screen, enemy):
     if ENEMY_IMG is None:
         pygame.draw.rect(screen, RED, [enemy.x, enemy.y, enemy.get_width(), enemy.get_height()])
     else:
-        screen.blit(WINGS[WING_COLORS[random.randint(0, 6)]], (enemy.x+enemy.width/2, enemy.y))
+        screen.blit(WINGS[enemy.sign.id[1]], (enemy.x+enemy.width/2, enemy.y))
         enemy_class = enemy.sign.id[0]
         screen.blit(ORBS[CLASS_TO_TYPE[enemy_class]], (enemy.x, enemy.y))
+        screen.blit(STACHES[enemy.sign.id[2]], ((enemy.x + enemy.centerx - 5)/2, enemy.centery + 5))
 
 
 def draw_rupee(screen, rupee):
@@ -202,7 +219,6 @@ def draw_laser(screen, laser):
         laser_offset %= GLOW_ORANGE.get_width() - environment.WINDOW_WIDTH
 
 
-
 def draw_pewpew(screen, pewpew):
     if PEW_IMG is None:
         pygame.draw.rect(screen, RED, [pewpew.x, pewpew.y, pewpew.width, pewpew.height])
@@ -210,6 +226,10 @@ def draw_pewpew(screen, pewpew):
         screen.blit(PEW_IMG, (pewpew.x, pewpew.y))
 
 
+def draw_score(screen, score):
+    font=pygame.font.Font(None, 30)
+    scoretext = font.render("Score: "+str(score), 1,(255,255,255))
+    screen.blit(scoretext, (environment.WINDOW_WIDTH - 200, 5))
 
 
 

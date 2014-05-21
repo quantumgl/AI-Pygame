@@ -9,4 +9,5 @@ class Waddle_Dee(Enemy):
         self.waddle_dee_rect = pygame.Rect(spawn_x, spawn_y, self.waddle_dee_size, self.waddle_dee_size)
 
         Enemy.__init__(self, self.waddle_dee_rect, sign, w)
-        self.base_speed = self.stats.speed
+        if self.stats.speed > 1:
+            self.base_speed = self.stats.speed
