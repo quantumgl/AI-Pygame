@@ -1,6 +1,7 @@
 #enemy_wave_generator.py
 # Enemy Wave Generator
 import random
+import time
 import environment as settings
 from models.enemies import Waddle_Dee
 
@@ -9,56 +10,56 @@ ENEMY_CLASSES = [
 ]
 
 
-def generate_vertical_wave():
+def generate_vertical_wave(w=1.0):
     wave = []
     for i in range(5):
         enemy_type = ["ORB", [ENEMY_CLASSES[random.randint(0, 6)], None]]
-        new_enemy = Waddle_Dee(settings.WINDOW_WIDTH + 200, i * settings.WINDOW_HEIGHT/5 + 10, enemy_type)
+        new_enemy = Waddle_Dee(settings.WINDOW_WIDTH + 200, i * settings.WINDOW_HEIGHT/5 + 10, enemy_type, w)
         wave.append(new_enemy)
     #print wave
     return wave
 
 
-def generate_diagonal_wave_1():
+def generate_diagonal_wave_1(w=1.0):
     wave = []
     for i in range(7):
         enemy_type = ["ORB", [ENEMY_CLASSES[random.randint(0, 6)], None]]
-        new_enemy = Waddle_Dee(settings.WINDOW_WIDTH + 100* (i+2), settings.WINDOW_HEIGHT - 40 * (i+1), enemy_type)
+        new_enemy = Waddle_Dee(settings.WINDOW_WIDTH + 100* (i+2), settings.WINDOW_HEIGHT - 40 * (i+1), enemy_type, w)
         wave.append(new_enemy)
     #print wave
     return wave
 
 
-def generate_diagonal_wave_2():
+def generate_diagonal_wave_2(w=1.0):
     wave = []
     for i in range(7):
         enemy_type = ["ORB", [ENEMY_CLASSES[random.randint(0, 6)], None]]
-        new_enemy = Waddle_Dee(settings.WINDOW_WIDTH + 100* (i+2), 10 + (40 * i), enemy_type)
+        new_enemy = Waddle_Dee(settings.WINDOW_WIDTH + 100* (i+2), 10 + (40 * i), enemy_type, w)
         wave.append(new_enemy)
     #print wave
     return wave
 
 
-def generate_v_shaped_wave():
+def generate_v_shaped_wave(w=1.0):
     wave = []
     enemy_type = ["ORB", [ENEMY_CLASSES[random.randint(0, 6)], None]]
-    wave.append(Waddle_Dee(settings.WINDOW_WIDTH + 100, settings.WINDOW_HEIGHT/2 + 20, enemy_type))
-    wave.append(Waddle_Dee(settings.WINDOW_WIDTH + 400, settings.WINDOW_HEIGHT/2 + 50, enemy_type))
-    wave.append(Waddle_Dee(settings.WINDOW_WIDTH + 400, settings.WINDOW_HEIGHT/2 - 50, enemy_type))
-    wave.append(Waddle_Dee(settings.WINDOW_WIDTH + 800, settings.WINDOW_HEIGHT/2 + 100, enemy_type))
-    wave.append(Waddle_Dee(settings.WINDOW_WIDTH + 800, settings.WINDOW_HEIGHT/2 - 100, enemy_type))
+    wave.append(Waddle_Dee(settings.WINDOW_WIDTH + 100, settings.WINDOW_HEIGHT/2 + 20, enemy_type, w))
+    wave.append(Waddle_Dee(settings.WINDOW_WIDTH + 400, settings.WINDOW_HEIGHT/2 + 50, enemy_type, w))
+    wave.append(Waddle_Dee(settings.WINDOW_WIDTH + 400, settings.WINDOW_HEIGHT/2 - 50, enemy_type, w))
+    wave.append(Waddle_Dee(settings.WINDOW_WIDTH + 800, settings.WINDOW_HEIGHT/2 + 100, enemy_type, w))
+    wave.append(Waddle_Dee(settings.WINDOW_WIDTH + 800, settings.WINDOW_HEIGHT/2 - 100, enemy_type, w))
     #print wave
     return wave
 
 
-def generate_inverse_v_shaped_wave():
+def generate_inverse_v_shaped_wave(w=1.0):
     wave = []
     enemy_type = ["ORB", [ENEMY_CLASSES[random.randint(0, 6)], None]]
-    wave.append(Waddle_Dee(settings.WINDOW_WIDTH + 300, settings.WINDOW_HEIGHT/2 + 20, enemy_type))
-    wave.append(Waddle_Dee(settings.WINDOW_WIDTH + 200, settings.WINDOW_HEIGHT/2 + 50, enemy_type))
-    wave.append(Waddle_Dee(settings.WINDOW_WIDTH + 200, settings.WINDOW_HEIGHT/2 - 50, enemy_type))
-    wave.append(Waddle_Dee(settings.WINDOW_WIDTH + 100, settings.WINDOW_HEIGHT/2 + 100, enemy_type))
-    wave.append(Waddle_Dee(settings.WINDOW_WIDTH + 100, settings.WINDOW_HEIGHT/2 - 100, enemy_type))
+    wave.append(Waddle_Dee(settings.WINDOW_WIDTH + 300, settings.WINDOW_HEIGHT/2 + 20, enemy_type, w))
+    wave.append(Waddle_Dee(settings.WINDOW_WIDTH + 200, settings.WINDOW_HEIGHT/2 + 50, enemy_type, w))
+    wave.append(Waddle_Dee(settings.WINDOW_WIDTH + 200, settings.WINDOW_HEIGHT/2 - 50, enemy_type, w))
+    wave.append(Waddle_Dee(settings.WINDOW_WIDTH + 100, settings.WINDOW_HEIGHT/2 + 100, enemy_type, w))
+    wave.append(Waddle_Dee(settings.WINDOW_WIDTH + 100, settings.WINDOW_HEIGHT/2 - 100, enemy_type, w))
     #print wave
     return wave
 

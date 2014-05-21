@@ -9,3 +9,5 @@ from enemies import Waddle_Dee
 from pickups import Rupee
 
 from projectiles import Laser, Bullet
+
+from mastermind import Mastermind

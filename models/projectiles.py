@@ -7,7 +7,7 @@ from models import Projectile
 
 class Laser(Projectile):
     def __init__(self, laser_x, laser_y, sign=None, speed=20):
-        self.laser_height = 40
+        self.laser_height = 20
         self.laser_width = environment.WINDOW_WIDTH - laser_x
         self.laser_rect = pygame.Rect(laser_x, laser_y, self.laser_width, self.laser_height)
 

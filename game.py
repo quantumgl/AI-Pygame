@@ -12,6 +12,7 @@
 """Initializes and runs the game."""
 
 import sys
+import time
 import pygame
 import environment
 import keyboard
@@ -84,10 +85,9 @@ def handle_input(END_GAME = False):
         
         # Shoot Laser
         if keyboard.laser_prompt(keys):
-            game_state.hero.is_firing_laser = True
-        else:
-            if game_state.hero.is_firing_laser:
-                game_state.hero.stop_firing_laser()
+            if game_state.hero.laser_equipped:
+                game_state.hero.is_firing_laser = True
+                game_state.hero.fire_time = time.clock()
 
         # Shoot Pew
         if keyboard.pew_prompt(keys):
@@ -109,45 +109,65 @@ def game_logic():
     game_state.hero.update_pos()
     game_state.hero.recharge()
 
-    for enemy in game_state.enemy_list:
-        if helper.check_collision(enemy, game_state.hero):
-            game_state.game_over = True
-            print "GAME_OVER"  # GAME OVER - TODO
+    if game_state.hero.vulnerable:
+        for enemy in game_state.enemy_list:
+            if helper.check_collision(enemy, game_state.hero):
+                game_state.hero.get_hit_by_enemy(enemy)
+                game_state.hero.knockback()
+                game_state.hero.give_immunity()
+                game_state.update_hero_bar()
+                if game_state.hero.isdead():
+                    game_state.game_over = True
+                    print "GAME_OVER"  # GAME OVER - TODO
+    else:
+        if (time.clock() - game_state.hero.vulnerability_time) > 1.5:
+            game_state.hero.take_immunity()
 
     # Hero - Laser
     if game_state.hero.is_firing_laser:
-        game_state.hero.fire_laser()
+        if time.clock() - game_state.hero.fire_time < 6:
+            game_state.hero.fire_laser()
+        else:
+            game_state.hero.stop_firing_laser()
 
     # Pews
     game_state.update_pews()
     
     # Rupees
-    game_state.update_rupees()
+    game_state.update_pickups()
 
     # Enemies and Waves
     game_state.update_enemies()
+
+    hp_100 = game_state.hero.stats.current_hp / game_state.hero.stats.hp
+    game_state.master.update(hp_100)
 
     
 def draw():
     """
     Draws everything and updates the changes in the screen
     """
-    picasso.draw_background(environment.DISPLAY_SURFACE)
+    screen = environment.DISPLAY_SURFACE
 
-    picasso.draw_hero(environment.DISPLAY_SURFACE, game_state.hero)
+    picasso.draw_background(screen)
+
+    picasso.draw_hero(screen, game_state.hero)
 
     for pewpew in game_state.projectile_list:
         if not pewpew.is_out_of_screen():
-            picasso.draw_pewpew(environment.DISPLAY_SURFACE, pewpew)
+            picasso.draw_pewpew(screen, pewpew)
 
-    for rupee in game_state.rupee_list:
-        picasso.draw_rupee(environment.DISPLAY_SURFACE, rupee)
+    for pickup in game_state.pickup_list:
+        picasso.draw_pickup(screen, pickup)
     
     if game_state.hero.is_firing_laser:
-        picasso.draw_laser(environment.DISPLAY_SURFACE, game_state.hero.laser)
+        picasso.draw_laser(screen, game_state.hero.laser)
      
     for enemy in game_state.enemy_list:
-        picasso.draw_enemy(environment.DISPLAY_SURFACE, enemy)
+        picasso.draw_enemy(screen, enemy)
+        picasso.draw_bar(screen, enemy.bar)
+
+    picasso.draw_bar(screen, game_state.hero_bar, hero_bar=True)
 
     pygame.display.update()
 
@@ -155,18 +175,20 @@ def draw():
 #End Game
 def end_game():
     if game_state.game_over:
-        picasso.draw_background(environment.DISPLAY_SURFACE)
-        environment.DISPLAY_SURFACE.blit(environment.GAME_OVER_TEXT,(environment.WINDOW_WIDTH/4,environment.WINDOW_HEIGHT/2))
-        environment.DISPLAY_SURFACE.blit(environment.PROMPT_TEXT,(environment.WINDOW_WIDTH/4,environment.WINDOW_HEIGHT*(3.0/4.0)))
+        surf = environment.DISPLAY_SURFACE
+
+        picasso.draw_background(surf)
+        surf.blit(environment.GAME_OVER_TEXT,(environment.WINDOW_WIDTH/4,environment.WINDOW_HEIGHT/2))
+        surf.blit(environment.PROMPT_TEXT,(environment.WINDOW_WIDTH/4,environment.WINDOW_HEIGHT*(3.0/4.0)))
         pygame.display.update()
 
         while game_state.game_over:
             handle_input(game_state.game_over)
 
     if game_state.win:
-        picasso.draw_background(environment.DISPLAY_SURFACE)
-        environment.DISPLAY_SURFACE.blit(environment.WIN_TEXT,(environment.WINDOW_WIDTH/8,environment.WINDOW_HEIGHT/2))
-        environment.DISPLAY_SURFACE.blit(environment.PROMPT_TEXT,(environment.WINDOW_WIDTH/4,environment.WINDOW_HEIGHT*(3.0/4.0)))
+        picasso.draw_background(surf)
+        surf.blit(environment.WIN_TEXT,(environment.WINDOW_WIDTH/8,environment.WINDOW_HEIGHT/2))
+        surf.blit(environment.PROMPT_TEXT,(environment.WINDOW_WIDTH/4,environment.WINDOW_HEIGHT*(3.0/4.0)))
         pygame.display.update()
 
         while game_state.win:
