@@ -218,11 +218,13 @@ def handle_quit(event, GAME_OVER = False):
 if __name__ == '__main__':
     dj.loop_background_music()
     pygame.display.set_caption("BitCuisine Experiment")
-    possibilities = ["FIXED", "DYNAMIC"]
+    possibilities = ["DYNAMIC", "FIXED"]
     game_state = GameState(possibilities[random.randint(0, 1)])
-    log = logger.Log("", game_state)
+    log = logger.Log("danny", game_state)
     log.first_row()
     main(log)
+
+#doc
 
 
 
